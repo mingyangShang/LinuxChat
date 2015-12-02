@@ -22,7 +22,25 @@
 	|----|----|---|----|
 	|_gid|组id|varchar(32)|主键，32位uuid|
 	|name|群组名称|varchar(20)|20字数限制|
-	|owner|创建者|varchar(32)|外键，参照User表中的_id
+	|owner|创建者|varchar(32)|外键，参照User表中的_id|
+	|create_time|创建时间|long|格林尼治毫秒数|
+	|max_num|最大支持人数|Integer|默认20|
+	
+- Group_User(群组包含用户关系表)：
+
+	|列名|描述|类型|约束|
+	|----|----|---|----|
+	|gid|群组id|varchar(32)|外键，参照Group表中的_gid|
+	|members|成员id集合|string|以;分隔|
+	
+- User_Group(用户所在群组关系表)：
+
+	|列名|描述|类型|约束|
+	|----|----|---|----|
+	|uid|用户ID|varchar(32)|外键，参照User表中的_uid|
+	|owners|群组ID集合|string|以;分隔|
+
+	
 	
 - MsgType(消息类型表)：
 
