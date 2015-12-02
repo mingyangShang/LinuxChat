@@ -16,6 +16,14 @@
 	|sex|性别|char(1)|M（男）或 W（女）|
 	|sign|个人签名|varchar(40)|40字数限制|
 	
+- Friends(好友列表)：
+	
+	|列名|描述|类型|约束|
+	|----|----|----|----|
+	|uid|用户ID|varchar(32)|外键，参照User中的_uid|
+	|friends|好友ID列表|string|以;分隔，每一项参照User中的_uid|
+	
+	
 - Group(群组表)：
 
 	|列名|描述|类型|约束|
