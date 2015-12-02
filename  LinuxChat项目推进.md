@@ -1,0 +1,46 @@
+# <center>LinuxChat项目推进</center>
+
+### 2015-11-30 完成后台技术选型
+### 2015-12-02 开始数据库设计
+- User(用户表)：
+
+	||用户ID|昵称|密码|性别|个人签名
+	|----|-----|---|---|---|---|
+	|列名|_uid|nick|pwd|sex|sign|
+	
+	|列名|描述|类型|约束|
+	|----|----|----|----|
+	|_uid|用户ID|varchar(32)|主键，32位uuid|
+	|nick|昵称|varchar(20)|20字数限制|
+	|pwd|密码|varchar(32)|经md5加密|
+	|sex|性别|char(1)|M（男）或 W（女）|
+	|sign|个人签名|varchar(40)|40字数限制|
+	
+- Group(群组表)：
+
+	|列名|描述|类型|约束|
+	|----|----|---|----|
+	|_gid|组id|varchar(32)|主键，32位uuid|
+	|name|群组名称|varchar(20)|20字数限制|
+	|owner|创建者|varchar(32)|外键，参照User表中的_id
+	
+- MsgType(消息类型表)：
+
+	|列名|描述|类型}约束|
+	|----|----|----|----|
+	|_tid|消息类型ID|Integer|主键，递增|
+	|type|消息类型|varchar(10)|默认含有text(普通文本),img(图片),link(链接),code(代码),face(表情)
+
+- Msg(消息表)：
+	
+	|列名|描述|类型|约束|
+	|----|----|----|----|
+	|_mid|消息ID|varchar(32)|主键，32位uuid|
+	|from|发消息用户ID|varchar(32)|外键，参照User表中的_uid|
+	|to|接收者ID|varchar(32)|外键，参照User表中的_id或Group表中的_gid|
+	|type_to|接收者类型|char(1)|U(单用户) 或 G(群组)|
+	|type|消息类型|Integer|外键，参照MsgType中的_tid|
+	
+	**注:(单独将消息类型建表是为了支持消息类型的扩展性，可以方便地新增消息类型从而支持新消息的格式化处理)**
+	
+	
