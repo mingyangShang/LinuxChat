@@ -1,6 +1,13 @@
 # <center>LinuxChat项目推进</center>
 
 ### 2015-11-30 完成后台技术选型
+- 语言：PHP
+
+- 框架：swoole
+
+
+- 数据库：mysql＋radius
+	
 ### 2015-12-02 开始数据库设计
 - User(用户表)：
 
