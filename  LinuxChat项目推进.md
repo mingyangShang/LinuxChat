@@ -1,9 +1,9 @@
 # <center>LinuxChat项目推进</center>
 
 ### 2015-11-30 完成后台技术选型
-- 语言：PHP
+- 语言：Python
 
-- 框架：swoole
+- 框架：Django
 
 
 - 数据库：mysql＋radius
