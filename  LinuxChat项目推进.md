@@ -62,7 +62,7 @@
 	|uid|用户ID|varchar(32)|外键，参照User表中的_uid|
 	|owners|群组ID集合|string|以;分隔|
 	
-- ~~Members(群组用户关系表)~~
+- Members(群组用户关系表)
 	
 	|列名|描述|类型|约束|
 	|----|----|---|----|
