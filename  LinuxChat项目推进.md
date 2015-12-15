@@ -75,25 +75,33 @@
 	|列名|描述|类型|约束|
 	|----|----|----|----|
 	|_tid|消息类型ID|Integer|主键，递增|
-	|type|消息类型|varchar(10)|默认含有text(普通文本),img(图片),link(链接),code(代码),face(表情)
+	|type|消息类型|varchar(10)|默认含有text(普通文本),img(图片),link(链接),code(代码),face(表情),file(文件)
 
 - Msg(消息表)：
 	
 	|列名|描述|类型|约束|
 	|----|----|----|----|
 	|_mid|消息ID|varchar(32)|主键，32位uuid|
-	|from|发消息用户ID|varchar(32)|外键，参照User表中的_uid|
-	|to|接收者ID|varchar(32)|外键，参照User表中的_id或Group表中的_gid|
-	|type_to|接收者类型|char(1)|U(单用户) 或 G(群组)|
+	|from_user|发消息用户ID|varchar(32)|外键，参照User表中的_uid|
+	|to_user|接收者ID|varchar(32)|外键，参照User表中的_id或|
+	|to_group|接收组ID|varchar(32)|外键，参照Group表中的_gid|
 	|type|消息类型|Integer|外键，参照MsgType中的_tid|
+	|content|实际内容|text|图片存地址，表情存字符串，代码存元格式
 	
 	**注:<br />
 	1.单独将消息类型建表是为了支持消息类型的扩展性，可以方便地新增消息类型从而支持新消息的格式化处理<br />
 	2.弃用关系表（好友表，组群用户表）的列表拼凑属性，改为单独的id对应关系，虽然会造成部分冗余，但在更新，删除的时候能提高速度，查询只需第一次从数据中查询然后存至缓存数据库`radius`中，有更新回写（为保证一致性，抽为事务，并且先写数据库再写内存）**
 	
 ### 2015-12-10 搭建好后台开发环境
-virtualenv＋django
+virtualenv＋django+pillow
 
 ### 2015-12-12 完成命令行终端通讯demo
+
+### 2015-12-15 完成数据库搭建，django中创建mysql表及CURD测试
+1. mysql默认编码为latin，为使支持中文，需要修改数据默认编码
+2. django中的外键反馈策略导致多外键时冲突，需加related_name区分
+3. ImageField使用pillow库
+4. 消息表的设计还是不太合理，如何设计这种包含多种类型字段的数据的表？？？
+
 	
 	

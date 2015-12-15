@@ -4,3 +4,5 @@ Server/bin
 Server/include
 Server/lib
 *.json
+*.idea
+Server/.idea/
