@@ -68,7 +68,7 @@
 	|----|----|---|----|
 	|gid|群组ID|varchar(32)|主键，外键，参照Group表中的_gid|
 	|uid|成员ID|varchar(32)|主键，外键，参照User表中的_uid|
-	
+	（）
 	
 - MsgType(消息类型表)：
 
@@ -102,6 +102,28 @@ virtualenv＋django+pillow
 2. django中的外键反馈策略导致多外键时冲突，需加related_name区分
 3. ImageField使用pillow库
 4. 消息表的设计还是不太合理，如何设计这种包含多种类型字段的数据的表？？？
+
+### 2015-12-17 完成Url，服务API设计
+|url|用途|请求方式|参数|返回格式(外层json含有success键和error键，具体信息在data键对应值，以下不再列出success和error键)
+|---|---|---|---|---|
+|/user/register|注册|POST|{username,sex,pwd,sign}|{"data":"{}"}|
+|/user/login|登录|POST|{username,pwd}|{"data":{"uid":<uuid>,"timestamp":<currenttime>,"cookie":"<random string>"}}|
+|/user/delete|删除|POST|{uid}|{"data":"{}"}|
+|/user/get|查询|POST|{uid}|{"data":{"name":<name>,"sex":<M or W>,sign:<sign>"}}|
+|user/<uid>|查询|GET|{uid}|{"data":{"name":<name>,"sex":<M or W>,sign:<sign>"}|
+|user/friend/invite|添加好友|POST|{from,to(name or uid)}|{"data:":{}}|
+|user/friend/accept|同意好友邀请|POST|{from}|{"data":""}|
+|user/friend/delete|删除好友|POST|{from,delete_friend}|{"data"":{}}|
+|user/group/create|创建讨论组|POST|{from,group_name,members}|{"data":"{"gid":"<gid>","members":<[members]>}"}|
+|user/group/exit|退出讨论组|POST|{from,group_id}|{"data":""}|
+|user/group/members/add|添加组成员|POST|{from,gid,[member_id]}|{"data":""}|
+|user/group/members/remove|删除组成员|POST|{from,gid,[member_id]}|{"data":""}|
+|chat/group|查看组消息|POST|{from,gid,start_time,start_page,end_page}|{"data":"{"msg":<[msg]>}"}|
+|chat/person|查看个人聊天消息|POST|{from,gid,start_time,start_page,end_page}|{"data":"{"msg":<[msg]>}}|
+
+
+
+
 
 	
 	
