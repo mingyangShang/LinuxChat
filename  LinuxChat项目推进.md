@@ -86,7 +86,19 @@
 	|to_user|接收者ID|varchar(32)|外键，参照User表中的_id或|
 	|to_group|接收组ID|varchar(32)|外键，参照Group表中的_gid|
 	|type|消息类型|Integer|外键，参照MsgType中的_tid|
-	|content|实际内容|text|图片存地址，表情存字符串，代码存元格式
+	|content|实际内容|text|图片存地址，表情存字符串，代码存元格式|
+	|time|时间|long|格林尼治毫秒数|
+	
+- Invite(邀请信息表)
+	
+	|列名|描述|类型|约束|
+	|----|----|----|----|
+	|_mid|消息ID|varchar(32)|主键，32位uuid|
+	|from_user|发消息用户ID|varchar(21)|外键，参照User表中的_uid|
+	|to_user|接受者ID|varchar(32)|外键，参照User表中的_uid|
+	|status|邀请信息状态|Integer|0：未被处理，1：同意，2：拒绝|
+	|invite_time|邀请时间|datatime|日期格式，如2015-12-22 09:22:00.166937|
+	|invite_reason|好友添加理由|varchar(40)|字数最多40|
 	
 	**注:<br />
 	1.单独将消息类型建表是为了支持消息类型的扩展性，可以方便地新增消息类型从而支持新消息的格式化处理<br />
@@ -111,16 +123,15 @@ virtualenv＋django+pillow
 |/user/delete|删除|POST|{uid}|{"data":"{}"}|
 |/user/get|查询|POST|{uid}|{"data":{"name":<name>,"sex":<M or W>,sign:<sign>"}}|
 |user/<uid>|查询|GET|{uid}|{"data":{"name":<name>,"sex":<M or W>,sign:<sign>"}|
-|user/friend/invite|添加好友|POST|{from,to(name or uid)}|{"data:":{}}|
-|user/friend/accept|同意好友邀请|POST|{from}|{"data":""}|
-|user/friend/delete|删除好友|POST|{from,delete_friend}|{"data"":{}}|
+|user/friend/invite|添加好友|POST|{from,to(name or uid),reason}|{"data:":{}}|
+|user/invite/reply|回复好友申请|POST|{from,to,accept:Boolean}|{"data":{xxx同意了xxx或xxx拒绝了xxx}}
 |user/group/create|创建讨论组|POST|{from,group_name,members}|{"data":"{"gid":"<gid>","members":<[members]>}"}|
 |user/group/exit|退出讨论组|POST|{from,group_id}|{"data":""}|
 |user/group/members/add|添加组成员|POST|{from,gid,[member_id]}|{"data":""}|
 |user/group/members/remove|删除组成员|POST|{from,gid,[member_id]}|{"data":""}|
 |chat/group|查看组消息|POST|{from,gid,start_time,start_page,end_page}|{"data":"{"msg":<[msg]>}"}|
 |chat/person|查看个人聊天消息|POST|{from,gid,start_time,start_page,end_page}|{"data":"{"msg":<[msg]>}}|
-
+### 2015-12-20 新增Invite表，完成http接口
 
 
 

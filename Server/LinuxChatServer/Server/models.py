@@ -1,10 +1,13 @@
 # coding:utf-8
 from __future__ import unicode_literals
 
-from django.db import models
+import time,datetime
 import uuid
 
-from custom_fields import TimestampField
+from django.db import models
+from django.utils import timezone
+
+from fields import TimestampField
 # Create your models here.
 
 
@@ -15,12 +18,15 @@ class User(models.Model):
         ('W','woman')
     )
     _uid = models.UUIDField(primary_key=True,default=uuid.uuid4, editable=False)
-    nick = models.CharField(max_length=20,default="")
+    name = models.CharField(max_length=20,default="")
     pwd = models.CharField(max_length=32,default="")
     sex = models.CharField(max_length=1,default='M',choices=sex_choice)
     sign = models.CharField(max_length=40,default="")
 
     friends = models.ManyToManyField("self",db_table="Friends")
+
+    def to_json(self):
+        return {"uid":str(self._uid),"name":self.name,"sex":self.sex,"sign":self.sign}
 
 # class Friends(models.Model):
 #
@@ -36,6 +42,9 @@ class Group(models.Model):
     max_num = models.IntegerField(default=10)
 
     members = models.ManyToManyField(User,through="Members")
+
+    def to_json(self):
+        return {"gid":str(self._gid),"name":self.name,"owner":self.owner.name,"create_time":self.create_time,"max_num":self.max_num}
 
 class Members(models.Model):
 
@@ -67,6 +76,27 @@ class Msg(models.Model):
     text_content = models.TextField()
     file_content = models.FileField()
     image_content = models.ImageField()
+    send_time = TimestampField()
+
+class Invite(models.Model):
+
+    STATUS_UNHANDLED = 0
+    STATUS_ACCEPTED = 1
+    STATUS_REFUSED = 2
+
+    invite_status = (
+        (STATUS_UNHANDLED,'unhandled'),
+        (STATUS_ACCEPTED,'accepted'),
+        (STATUS_REFUSED,'refused')
+    )
+
+    _mid = models.UUIDField(primary_key=True,default=uuid.uuid4, editable=False)
+    from_user = models.ForeignKey(User,related_name="invite_from_user",related_query_name="invite_from_user")
+    to_user = models.ForeignKey(User,related_name="invite_to_user",related_query_name="invite_to_user")
+    status = models.IntegerField(default=0)
+    invite_reason = models.CharField(max_length=40)
+    invite_time = models.DateTimeField(default=timezone.now)
+
 
 class Demo(models.Model):
     demo = models.CharField(max_length=20)
